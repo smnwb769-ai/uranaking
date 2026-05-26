@@ -22,7 +22,11 @@ input:focus{border-color:#7F77DD}
 .btn:active{opacity:.75}
 .sh{font-size:10px;font-weight:700;color:#aaa;letter-spacing:.1em;margin:1.4rem 0 8px;text-transform:uppercase}
 .cards{display:flex;flex-direction:column;gap:9px}
-.rc{background:#fff;border:0.5px solid #e0ddd6;border-radius:13px;padding:.9rem 1rem}
+.rc{background:#fff;border:0.5px solid #e0ddd6;border-radius:13px;padding:.9rem 1rem;cursor:pointer}
+.rc:active{background:#faf9ff}
+.rc.open{border-color:#7F77DD}
+.rt{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.rl{flex:1}
 .rl-lbl{font-size:11px;color:#999;margin-bottom:4px}
 .rr{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:3px}
 .badge{font-size:10px;padding:2px 8px;border-radius:999px;font-weight:600}
@@ -32,9 +36,13 @@ input:focus{border-color:#7F77DD}
 .bk{background:#FBEAF0;color:#993556}
 .rv{font-size:17px;font-weight:700}
 .rs{font-size:11px;color:#777;line-height:1.5}
+.ch{font-size:11px;color:#ccc;flex-shrink:0;margin-top:4px;transition:transform .2s}
+.rc.open .ch{transform:rotate(180deg)}
+.rd{font-size:12px;color:#555;line-height:1.7;display:none;border-top:0.5px solid #f0eee8;padding-top:8px;margin-top:8px}
+.rc.open .rd{display:block}
 .tt{font-size:9px;color:#993556;background:#FBEAF0;padding:1px 6px;border-radius:999px;margin-left:5px;font-weight:600}
 .tg{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
-.tc{background:#f5f4f0;border:0.5px solid #e0ddd6;border-radius:11px;padding:.75rem .5rem;text-align:center;cursor:pointer;transition:background .15s,border-color .15s}
+.tc{background:#f5f4f0;border:0.5px solid #e0ddd6;border-radius:11px;padding:.75rem .5rem;text-align:center;cursor:pointer}
 .tc.flipped{background:#fff;border-color:#7F77DD}
 .tc:active{opacity:.7}
 .tl{font-size:10px;color:#999;margin-bottom:5px}
@@ -60,13 +68,11 @@ input:focus{border-color:#7F77DD}
 <body>
 <h1>👑 ウラナ王</h1>
 <p class="sub">名前と生年月日だけで9種類の占いを横断する</p>
-
 <div class="key-wrap">
   <label>Anthropic APIキー</label>
   <input type="password" id="apikey" placeholder="sk-ant-..." autocomplete="off">
   <div class="key-note">※ このデバイス内だけで使用。外部送信はされません。</div>
 </div>
-
 <div class="ic">
   <div class="r2">
     <div><label>名前</label><input type="text" id="nm" placeholder="田中 さくら" autocomplete="off"></div>
@@ -74,25 +80,24 @@ input:focus{border-color:#7F77DD}
   </div>
   <button class="btn" onclick="go()">✨ 占う</button>
 </div>
-
 <div id="res">
   <div class="sh">⭐ 星・運命系</div>
   <div class="cards">
-    <div class="rc"><div class="rl-lbl">星座</div><div class="rr"><span class="badge bp" id="z-b"></span><span class="rv" id="z-v"></span></div><div class="rs" id="z-s"></div></div>
-    <div class="rc"><div class="rl-lbl">数秘術</div><div class="rr"><span class="badge bt" id="n-b"></span><span class="rv" id="n-v"></span></div><div class="rs" id="n-s"></div></div>
-    <div class="rc"><div class="rl-lbl">誕生日占い</div><div class="rr"><span class="badge ba" id="b-b"></span><span class="rv" id="b-v"></span></div><div class="rs" id="b-s"></div></div>
+    <div class="rc" onclick="this.classList.toggle('open')"><div class="rt"><div class="rl"><div class="rl-lbl">星座</div><div class="rr"><span class="badge bp" id="z-b"></span><span class="rv" id="z-v"></span></div><div class="rs" id="z-s"></div></div><span class="ch">▼</span></div><div class="rd" id="z-d"></div></div>
+    <div class="rc" onclick="this.classList.toggle('open')"><div class="rt"><div class="rl"><div class="rl-lbl">数秘術</div><div class="rr"><span class="badge bt" id="n-b"></span><span class="rv" id="n-v"></span></div><div class="rs" id="n-s"></div></div><span class="ch">▼</span></div><div class="rd" id="n-d"></div></div>
+    <div class="rc" onclick="this.classList.toggle('open')"><div class="rt"><div class="rl"><div class="rl-lbl">誕生日占い</div><div class="rr"><span class="badge ba" id="b-b"></span><span class="rv" id="b-v"></span></div><div class="rs" id="b-s"></div></div><span class="ch">▼</span></div><div class="rd" id="b-d"></div></div>
   </div>
   <div class="sh">🀄 東洋系</div>
   <div class="cards">
-    <div class="rc"><div class="rl-lbl">干支</div><div class="rr"><span class="badge ba" id="e-b"></span><span class="rv" id="e-v"></span></div><div class="rs" id="e-s"></div></div>
-    <div class="rc"><div class="rl-lbl">九星気学</div><div class="rr"><span class="badge bt" id="k-b"></span><span class="rv" id="k-v"></span></div><div class="rs" id="k-s"></div></div>
-    <div class="rc"><div class="rl-lbl">姓名判断</div><div class="rr"><span class="badge bp" id="s-b"></span><span class="rv" id="s-v"></span></div><div class="rs" id="s-s"></div></div>
+    <div class="rc" onclick="this.classList.toggle('open')"><div class="rt"><div class="rl"><div class="rl-lbl">干支</div><div class="rr"><span class="badge ba" id="e-b"></span><span class="rv" id="e-v"></span></div><div class="rs" id="e-s"></div></div><span class="ch">▼</span></div><div class="rd" id="e-d"></div></div>
+    <div class="rc" onclick="this.classList.toggle('open')"><div class="rt"><div class="rl"><div class="rl-lbl">九星気学</div><div class="rr"><span class="badge bt" id="k-b"></span><span class="rv" id="k-v"></span></div><div class="rs" id="k-s"></div></div><span class="ch">▼</span></div><div class="rd" id="k-d"></div></div>
+    <div class="rc" onclick="this.classList.toggle('open')"><div class="rt"><div class="rl"><div class="rl-lbl">姓名判断</div><div class="rr"><span class="badge bp" id="s-b"></span><span class="rv" id="s-v"></span></div><div class="rs" id="s-s"></div></div><span class="ch">▼</span></div><div class="rd" id="s-d"></div></div>
   </div>
   <div class="sh">💕 診断・エンタメ系</div>
   <div class="cards">
-    <div class="rc"><div class="rl-lbl">動物占い</div><div class="rr"><span class="badge bk" id="a-b"></span><span class="rv" id="a-v"></span></div><div class="rs" id="a-s"></div></div>
-    <div class="rc"><div class="rl-lbl">ラッキーカラー<span class="tt">今日</span></div><div class="rr"><span class="badge bk" id="c-b"></span><span class="rv" id="c-v"></span></div><div class="rs" id="c-s"></div></div>
-    <div class="rc"><div class="rl-lbl">パワーストーン<span class="tt">今日</span></div><div class="rr"><span class="badge bp" id="st-b"></span><span class="rv" id="st-v"></span></div><div class="rs" id="st-s"></div></div>
+    <div class="rc" onclick="this.classList.toggle('open')"><div class="rt"><div class="rl"><div class="rl-lbl">動物占い</div><div class="rr"><span class="badge bk" id="a-b"></span><span class="rv" id="a-v"></span></div><div class="rs" id="a-s"></div></div><span class="ch">▼</span></div><div class="rd" id="a-d"></div></div>
+    <div class="rc" onclick="this.classList.toggle('open')"><div class="rt"><div class="rl"><div class="rl-lbl">ラッキーカラー<span class="tt">今日</span></div><div class="rr"><span class="badge bk" id="c-b"></span><span class="rv" id="c-v"></span></div><div class="rs" id="c-s"></div></div><span class="ch">▼</span></div><div class="rd" id="c-d"></div></div>
+    <div class="rc" onclick="this.classList.toggle('open')"><div class="rt"><div class="rl"><div class="rl-lbl">パワーストーン<span class="tt">今日</span></div><div class="rr"><span class="badge bp" id="st-b"></span><span class="rv" id="st-v"></span></div><div class="rs" id="st-s"></div></div><span class="ch">▼</span></div><div class="rd" id="st-d"></div></div>
   </div>
   <div class="sh">🃏 タロット（タップしてめくる）</div>
   <div class="hint">1枚ずつタップ — 過去・現在・未来</div>
@@ -101,15 +106,14 @@ input:focus{border-color:#7F77DD}
   <div class="ac"><div id="ai"><div class="dots"><span></span><span></span><span></span></div></div></div>
   <p class="note">占い結果はエンターテインメントです 👑</p>
 </div>
-
 <script>
-var Z=["山羊座,12/22〜1/19,堅実・野心・責任感,努力家で地に足がついたタイプ","水瓶座,1/20〜2/18,独創・自由・博愛,個性的で未来志向の革新者","魚座,2/19〜3/20,共感・夢想・感受性,直感と共感力に溢れた優しい人","牡羊座,3/21〜4/19,情熱・行動力・リーダー,エネルギッシュで真っ直ぐな先駆者","牡牛座,4/20〜5/20,安定・美食・忍耐,穏やかで美的センス抜群の安定派","双子座,5/21〜6/21,知識・好奇心・コミュ力,話題豊富で場を盛り上げる社交家","蟹座,6/22〜7/22,家庭的・優しさ・直感,情に厚く守りたがりな愛情家","獅子座,7/23〜8/22,カリスマ・誇り・輝き,存在感抜群の堂々とした王様気質","乙女座,8/23〜9/22,几帳面・分析・奉仕,完璧主義で細部に気づく心配り上手","天秤座,9/23〜10/23,調和・美意識・公平,バランス感覚に優れた審美眼の持ち主","蠍座,10/24〜11/22,情熱・神秘・洞察力,深く鋭い洞察力を持つ謎めいた人","射手座,11/23〜12/21,自由・冒険・楽観,好奇心旺盛で明るい冒険家"].map(function(r){var p=r.split(',');return{n:p[0],r:p[1],k:p[2],d:p[3]};});
-var NI=["創始者・リーダー,強い意志と独立心。道を切り開く力があります","協調・平和主義,人の気持ちに敏感で調和が得意な人","創造・表現・社交,感受性豊かで話し上手な明るいムードメーカー","堅実・努力・安定,コツコツ積み上げる信頼されるしっかり者","自由・変化・冒険,刺激を求めて行動するエネルギッシュな自由人","愛情・責任・家庭,思いやり深く人を支えることに喜びを感じる","知性・分析・直感,深く考える哲学者タイプ。神秘的な魅力あり","力・達成・物質,目標達成能力が高い実行力あふれる野心家","奉仕・博愛・完成,大きな愛で人々を包む完結と奉仕の数字"].map(function(r){var p=r.split(',');return{n:p[0],k:p[0],d:p[1]};});
-var ET=["子（ねずみ）,機転が利き行動力抜群。愛嬌があってモテる","丑（うし）,粘り強く誠実。意志が強く信頼される存在","寅（とら）,情熱的でリーダー気質。正義感が強い","卯（うさぎ）,温かく優しい。人当たりよく人気者","辰（たつ）,カリスマ性抜群。夢を大きく描く理想主義者","巳（へび）,直感が鋭く神秘的。深く考える慎重派","午（うま）,活発で社交的。行動力があり場を盛り上げる","未（ひつじ）,芸術センスが高く穏やか。思いやりに溢れる","申（さる）,機知に富み多才。好奇心旺盛で飽きさせない","酉（とり）,完璧主義で几帳面。観察眼が鋭くおしゃれ","戌（いぬ）,忠義心が強く誠実。絆を何より大切にする","亥（いのしし）,一途で純粋。パワフルに目標へ突き進む"].map(function(r){var p=r.split(',');return{n:p[0],d:p[1]};});
-var KK=["一白水星,流動・適応,柔軟性が高く人脈を活かして運を開く","二黒土星,勤勉・忍耐,コツコツ型。信頼を積み上げる努力の星","三碧木星,活動・発展,スピード感と行動力が魅力。話題の中心に","四緑木星,信頼・調和,社交的で信頼厚い。縁を大切にする人","五黄土星,帝王・強運,強烈な個性とカリスマ性を持つ帝王の星","六白金星,リーダー・完璧,高い理想と完璧主義。頼られる存在","七赤金星,社交・金運,話術と愛嬌で場を盛り上げる人気者","八白土星,変革・蓄積,粘り強く変化を乗り越える変革の星","九紫火星,知性・美・直感,頭の回転が速く美的センス抜群"].map(function(r){var p=r.split(',');return{n:p[0],k:p[1],d:p[2]};});
-var AN=["黒豹,クールでミステリアス。実は一途な一面も","チーター,スピード感があり直感で動く行動派","ライオン,堂々としたカリスマ。頼りがいのある存在","虎,情熱的で正義感が強いリーダータイプ","こじか,純粋で感受性豊か。守ってあげたくなる","たぬき,愛嬌たっぷりで憎めないムードメーカー","子猫,甘えん坊で可愛い。実は芯が強い","ゾウ,温厚で記憶力抜群。仲間想いの大黒柱","おおかみ,孤高の一匹狼。信念を曲げない強さ","コアラ,マイペースで穏やか。癒しの存在","ひつじ,穏やかで優しい。芸術的センスあり","うさぎ,人当たりよく愛され上手。観察眼も鋭い"].map(function(r){var p=r.split(',');return{n:p[0],d:p[1]};});
-var CL=["ロイヤルブルー,落ち着きと知性を引き出す","ローズゴールド,愛される柔らかさと上品さを演出","パープル,神秘的な魅力と直感力を高める","エメラルドグリーン,癒しと成長のエネルギーを纏う","コーラルオレンジ,明るく社交的なオーラを放つ","ゴールド,自信と豊かさを引き寄せる太陽色","ラベンダー,感受性と創造力を優しく高める"].map(function(r){var p=r.split(',');return{n:p[0],d:p[1]};});
-var STN=["ローズクォーツ,愛と優しさの石。対人運を高める","アメジスト,直感と精神力を高める紫の癒し石","シトリン,明るいエネルギーで幸運を引き寄せる","ラピスラズリ,知恵と真実を司る深い青の石","ムーンストーン,直感と感受性を高める神秘の石","タイガーアイ,勇気と行動力を与える黄金の石","アクアマリン,コミュニケーション力を高める清らかな石"].map(function(r){var p=r.split(',');return{n:p[0],d:p[1]};});
+var Z=["山羊座,12/22〜1/19,堅実・野心・責任感,努力家で地に足がついたタイプ,土の星座。目標へ着実に進む力があり責任感の強さで周囲から信頼されます。恋愛では慎重ながら一途。仕事・金運◎","水瓶座,1/20〜2/18,独創・自由・博愛,個性的で未来志向の革新者,常識にとらわれない発想が武器。人道主義的で広いコミュニティで活躍。恋愛は友達から始まり精神的つながりを重視","魚座,2/19〜3/20,共感・夢想・感受性,直感と共感力に溢れた優しい人,12星座で最も感受性が豊か。芸術・音楽との相性抜群。恋愛では深く感情移入し献身的に尽くすタイプ","牡羊座,3/21〜4/19,情熱・行動力・リーダー,エネルギッシュで真っ直ぐな先駆者,瞬発力と行動力が持ち味。恋愛は一目惚れで猛烈アプローチ。新鮮さが長続きの秘訣","牡牛座,4/20〜5/20,安定・美食・忍耐,穏やかで美的センス抜群の安定派,五感が発達し美へのこだわりが強い。恋愛では安心感を大切にし長期的な関係を好む。金運は12星座トップ級","双子座,5/21〜6/21,知識・好奇心・コミュ力,話題豊富で場を盛り上げる社交家,知的好奇心旺盛で情報発信が得意。恋愛は会話が弾む相手と◎。刺激的な関係が長続きの秘訣","蟹座,6/22〜7/22,家庭的・優しさ・直感,情に厚く守りたがりな愛情家,家族・大切な人への愛情が深く直感で相手の気持ちをすぐ察します。恋愛では尽くすタイプ","獅子座,7/23〜8/22,カリスマ・誇り・輝き,存在感抜群の堂々とした王様気質,生まれながらのスター。恋愛はドラマチックで情熱的。褒め上手な相手と相性◎","乙女座,8/23〜9/22,几帳面・分析・奉仕,完璧主義で細部に気づく心配り上手,分析力と観察眼が卓越。恋愛では相手をじっくり見極め信頼すると深い絆を築きます","天秤座,9/23〜10/23,調和・美意識・公平,バランス感覚に優れた審美眼の持ち主,美的センスとコミュ力が高く調和を大切にします。恋愛ではロマンチストでおしゃれなデートを好みます","蠍座,10/24〜11/22,情熱・神秘・洞察力,深く鋭い洞察力を持つ謎めいた人,内側に情熱を秘める強烈エネルギー。恋愛は深く一途で独占欲も","射手座,11/23〜12/21,自由・冒険・楽観,好奇心旺盛で明るい冒険家,自由と冒険を愛する楽観主義者。恋愛では束縛を嫌い友達のような軽やかな関係を好みます"].map(function(r){var p=r.split(',');return{n:p[0],r:p[1],k:p[2],d:p[3],x:p[4]};});
+var NI=["創始者・リーダー,強い意志と独立心。道を切り開く力があります,パイオニア精神にあふれ人が行かない道を切り拓く。自立心強くリーダーとして輝く場面が多い","協調・平和主義,人の気持ちに敏感で調和が得意な人,相手の気持ちを察知し人間関係を円滑にする天才。チームの縁の下の力持ちとして活躍","創造・表現・社交,感受性豊かで話し上手な明るいムードメーカー,言葉・芸術・音楽で才能発揮。社交的で楽しい雰囲気を作るのが得意","堅実・努力・安定,コツコツ積み上げる信頼されるしっかり者,地道な努力で大きな成果を出す。責任感が強く誠実さが魅力","自由・変化・冒険,刺激を求めて行動するエネルギッシュな自由人,新しい経験でエネルギーをもらう好奇心旺盛なマルチタレント","愛情・責任・家庭,思いやり深く人を支えることに喜びを感じる,家族・友人を大切にコミュニティのために尽くす力がある。美的センスも高い","知性・分析・直感,深く考える哲学者タイプ。神秘的な魅力あり,真実を探求する哲学者タイプ。直感力が高くスピリチュアルな感性を持つ人も多い","力・達成・物質,目標達成能力が高い実行力あふれる野心家,目標を実現するエネルギーと決断力。ビジネスセンスが高く金運との縁も深い","奉仕・博愛・完成,大きな愛で人々を包む完結と奉仕の数字,広い視野と深い慈悲心で人や社会のために動ける大きな器"].map(function(r){var p=r.split(',');return{k:p[0],d:p[1],x:p[2]};});
+var ET=["子（ねずみ）,機転が利き行動力抜群。愛嬌があってモテる,素早い判断力と適応力が武器。社交的でどんな場でも愛される。金銭感覚も鋭い","丑（うし）,粘り強く誠実。意志が強く信頼される存在,忍耐力と誠実さが武器。一度決めたら最後までやり遂げる強い意志。恋愛では一途","寅（とら）,情熱的でリーダー気質。正義感が強い,勇気と情熱のリーダータイプ。弱いものを守る騎士精神あり","卯（うさぎ）,温かく優しい。人当たりよく人気者,温かさと優しさで周囲に愛される。芸術的センスも豊か","辰（たつ）,カリスマ性抜群。夢を大きく描く理想主義者,12支最高クラスのカリスマ性。大きな夢で周囲を巻き込む力がある","巳（へび）,直感が鋭く神秘的。深く考える慎重派,鋭い直感と知性を持つ思索家。美意識が高く洗練された雰囲気","午（うま）,活発で社交的。行動力があり場を盛り上げる,エネルギーと自由への愛があふれるアクティブタイプ","未（ひつじ）,芸術センスが高く穏やか。思いやりに溢れる,繊細な感性と豊かな芸術性。穏やかで周囲に安らぎを与える","申（さる）,機知に富み多才。好奇心旺盛で飽きさせない,知恵と機転が自慢の多才タイプ。ユーモアで一緒にいて楽しい","酉（とり）,完璧主義で几帳面。観察眼が鋭くおしゃれ,細部への気配りと観察眼が鋭い完璧主義者。おしゃれへの関心が高い","戌（いぬ）,忠義心が強く誠実。絆を何より大切にする,誠実さと忠義心が魅力。正直で裏表がなく信頼されやすい","亥（いのしし）,一途で純粋。パワフルに目標へ突き進む,純粋さとパワーが魅力。一度決めたらまっすぐ突き進む直進力"].map(function(r){var p=r.split(',');return{n:p[0],d:p[1],x:p[2]};});
+var KK=["一白水星,流動・適応,柔軟性が高く人脈を活かして運を開く,水のように柔軟に変化できる。コミュ力が高く人との縁で道が開ける","二黒土星,勤勉・忍耐,コツコツ型。信頼を積み上げる努力の星,安定と忍耐の星。地道な努力が実を結ぶ。信頼を積み上げることで大きな結果に","三碧木星,活動・発展,スピード感と行動力が魅力。話題の中心に,行動力と瞬発力が高く新しい挑戦が運を開く。話題性があり注目を集めやすい","四緑木星,信頼・調和,社交的で信頼厚い。縁を大切にする人,縁と信頼の星。人脈が広がり紹介で運が開ける。柔軟なコミュ力が武器","五黄土星,帝王・強運,強烈な個性とカリスマ性を持つ帝王の星,九星の中心で最強エネルギー。大きな成功も失敗も経験しやすい波乱万丈","六白金星,リーダー・完璧,高い理想と完璧主義。頼られる存在,高い理想と完璧主義。リーダーとして人を引っ張る力があり目上からも評価される","七赤金星,社交・金運,話術と愛嬌で場を盛り上げる人気者,話術が巧みで愛嬌があり人気者。金運と縁深い","八白土星,変革・蓄積,粘り強く変化を乗り越える変革の星,山のような堅固さと変革エネルギー。変化の中でも積み上げ続けることで大きな成果","九紫火星,知性・美・直感,頭の回転が速く美的センス抜群,炎のように輝く知性と美の星。直感やひらめきで判断。芸術・美容との縁が深い"].map(function(r){var p=r.split(',');return{n:p[0],k:p[1],d:p[2],x:p[3]};});
+var AN=["黒豹,クールでミステリアス。実は一途な一面も,クールな外見の裏に熱い情熱。独自のペースを持ち少数の深い関係を好む","チーター,スピード感があり直感で動く行動派,瞬発力と行動力が武器。チャンスを瞬時に見極めて飛び込む直感型","ライオン,堂々としたカリスマ。頼りがいのある存在,生まれながらのリーダー。誇り高く情熱的でロマンチック","虎,情熱的で正義感が強いリーダータイプ,情熱と正義感の行動派リーダー。困っている人を放っておけない義侠心","こじか,純粋で感受性豊か。守ってあげたくなる,繊細で純粋な感受性の持ち主。自然体の可愛らしさが人を惹きつける","たぬき,愛嬌たっぷりで憎めないムードメーカー,天性の愛嬌と明るさで場を和ませる。誰とでも仲良くなれる適応力","子猫,甘えん坊で可愛い。実は芯が強い,可愛らしい外見の裏に意外な芯の強さ。好き嫌いはっきりで懐くと全力","ゾウ,温厚で記憶力抜群。仲間想いの大黒柱,温厚で誠実な大黒柱。大切な人のことを細かく覚えていて仲間を支える","おおかみ,孤高の一匹狼。信念を曲げない強さ,高い自尊心と強い信念を持つ孤高の存在。仲間への忠誠心は非常に強い","コアラ,マイペースで穏やか。癒しの存在,マイペースで穏やかな癒し系。自分のペースを守ることが幸運の鍵","ひつじ,穏やかで優しい。芸術的センスあり,穏やかで協調性が高い平和主義者。豊かな感受性と芸術センス","うさぎ,人当たりよく愛され上手。観察眼も鋭い,柔らかい物腰の裏に鋭い観察眼。人の気持ちを読み取り場の空気を読むのが得意"].map(function(r){var p=r.split(',');return{n:p[0],d:p[1],x:p[2]};});
+var CL=["ロイヤルブルー,落ち着きと知性を引き出す,深い青は信頼と知性のシンボル。初対面や大切な場面で身につけると誠実な印象を与えます","ローズゴールド,愛される柔らかさと上品さを演出,温かみのあるピンクとゴールドの組み合わせ。柔らかさと気品を演出し対人運UP","パープル,神秘的な魅力と直感力を高める,直感力と創造性を高める色。インスピレーションが欲しい日にぴったり","エメラルドグリーン,癒しと成長のエネルギーを纏う,自然と成長を象徴し心と体を癒す。対人運・健康運ともに上昇","コーラルオレンジ,明るく社交的なオーラを放つ,コミュニケーション力と社交運を高める。人との交流が多い日に最適","ゴールド,自信と豊かさを引き寄せる太陽色,自信とエネルギーを与える金運・仕事運上昇の縁起色。小物に取り入れると効果的","ラベンダー,感受性と創造力を優しく高める,感受性と直感を研ぎ澄ませ心を穏やかに整える。ストレスを感じる日にも◎"].map(function(r){var p=r.split(',');return{n:p[0],d:p[1],x:p[2]};});
+var STN=["ローズクォーツ,愛と優しさの石。対人運を高める,愛と美の石。自己肯定感を高め周囲との関係を優しく調和させてくれます","アメジスト,直感と精神力を高める紫の癒し石,精神的浄化と直感力UP。不安やストレスを和らげ冷静な判断力を与えてくれます","シトリン,明るいエネルギーで幸運を引き寄せる,太陽のような黄金色が金運・仕事運を高める。ネガティブエネルギーを跳ね返す効果も","ラピスラズリ,知恵と真実を司る深い青の石,知性と真実の石。コミュ能力と直感を高め正しい判断へと導いてくれます","ムーンストーン,直感と感受性を高める神秘の石,月の光を閉じ込めた神秘的な輝き。直感力と感受性を高めます","タイガーアイ,勇気と行動力を与える黄金の石,決断力・行動力・集中力を高める。新しい挑戦や前に踏み出す勇気が欲しいときに","アクアマリン,コミュニケーション力を高める清らかな石,コミュ能力と誠実さを高め思いを正確に伝える力を与えてくれます"].map(function(r){var p=r.split(',');return{n:p[0],d:p[1],x:p[2]};});
 var TC=[["愚者","新しい出発・可能性・冒険","🎒"],["魔術師","才能・意志力・創造","🪄"],["女教皇","直感・神秘・潜在力","📖"],["女帝","豊かさ・愛情・繁栄","👑"],["皇帝","権威・安定・リーダーシップ","🏛️"],["教皇","信頼・伝統・助言","🕊️"],["恋人","愛・調和・選択","💞"],["戦車","勝利・前進・意志","⚔️"],["力","勇気・忍耐・内なる強さ","🦁"],["隠者","内省・知恵・孤独","🏮"],["運命の輪","転機・チャンス・流れ","🎡"],["正義","公正・バランス・真実","⚖️"],["吊られた男","待機・視点転換・犠牲","🙃"],["死神","変容・終わりと始まり・変化","🌑"],["節制","調和・忍耐・中庸","🏺"],["悪魔","束縛・誘惑・依存","🔗"],["塔","突然の変化・解放・覚醒","⚡"],["星","希望・癒し・インスピレーション","⭐"],["月","幻想・不安・無意識","🌙"],["太陽","成功・喜び・生命力","☀️"],["審判","覚醒・再生・評価","🎺"],["世界","完成・達成・統合","🌍"]];
 
 function td(){var t=new Date();return t.getFullYear()*10000+(t.getMonth()+1)*100+t.getDate();}
@@ -131,21 +135,22 @@ function go(){
   var h=hv(name),t=td();
 
   var zd=Z[zi(mo,d)];
-  sv('z-b',zd.r);sv('z-v',zd.n);sv('z-s',zd.k+'　'+zd.d);
+  sv('z-b',zd.r);sv('z-v',zd.n);sv('z-s',zd.k+'　'+zd.d);sv('z-d',zd.x);
 
   var l=lp(dob),ni=l<=9?l-1:l===11?1:l===22?3:0,nd=NI[Math.max(0,Math.min(8,ni))];
-  sv('n-b','No.'+l);sv('n-v',nd.k);sv('n-s',nd.d);
+  sv('n-b','No.'+l);sv('n-v',nd.k);sv('n-s',nd.d);sv('n-d',nd.x);
 
   var bk=["感受性型","行動力型","安定誠実型","直感創造型","気配り型"];
   var bs=["感受性豊かで優しいムードメーカー。直感が鋭く周囲を癒す。","行動力と好奇心のかたまり。場を盛り上げるエネルギッシュなタイプ。","慎重で思慮深い安定派。一度信頼すると深い絆を結ぶ誠実な人。","直感的に動くクリエイター。発想が豊かで人を惹きつけるオーラあり。","気配り上手で縁の下の力持ち。人から慕われるタイプ。"];
+  var bx=["感受性が高く空気をすぐに読み取れます。優しさと直感で困っている人をそっとサポートできる存在。","好奇心アンテナを常に張り巡らせ興味を持ったことにはすぐ行動。エネルギーが高く場を盛り上げる力があります。","じっくり考えてから動く慎重派。信頼関係を築いた相手には深い絆で応えます。","直感とひらめきで動く創造的なタイプ。型にはまらない発想が周囲を魅了します。","細やかな気配りと思いやりで周囲を陰ながら支える存在。その誠実さが大きな縁を引き寄せます。"];
   var bi=(d-1+h)%5;
-  sv('b-b',d+'日生まれ');sv('b-v',bk[bi]);sv('b-s',bs[bi]);
+  sv('b-b',d+'日生まれ');sv('b-v',bk[bi]);sv('b-s',bs[bi]);sv('b-d',bx[bi]);
 
   var ei=eto(y,mo,d),ed=ET[ei];
-  sv('e-b',y+'年生まれ');sv('e-v',ed.n);sv('e-s',ed.d);
+  sv('e-b',y+'年生まれ');sv('e-v',ed.n);sv('e-s',ed.d);sv('e-d',ed.x);
 
   var kkB=(mo<2?y-1:y)%9,ki=[8,7,6,5,4,3,2,1,0][kkB<0?kkB+9:kkB],kd=KK[ki];
-  sv('k-b','第'+(ki+1)+'星');sv('k-v',kd.n);sv('k-s',kd.k+'　'+kd.d);
+  sv('k-b','第'+(ki+1)+'星');sv('k-v',kd.n);sv('k-s',kd.k+'　'+kd.d);sv('k-d',kd.x);
 
   var str=1,nm=name.replace(/\s/g,'');
   for(var i=0;i<nm.length;i++)str+=nm.charCodeAt(i)%20+1;
@@ -153,16 +158,17 @@ function go(){
   var si=Math.abs(str+h)%5;
   var sn=["大吉","吉","中吉","小吉","末吉"];
   var ss=["大吉：才能と運が重なる強運の画数。","吉：安定した運勢で着実に幸運が集まる。","中吉：努力が報われる誠実な運の流れ。","小吉：穏やかな歩みが吉を招く。","末吉：粘り強さが開運のカギになる。"];
-  sv('s-b','総画 '+str+'画');sv('s-v',sn[si]);sv('s-s',ss[si]);
+  var sx=["才能と強運が重なる最高の組み合わせ。大きな夢を持ち自信を持って進むことが開運のポイント。","地道な努力が着実に報われる安定した吉。焦らず積み上げることが大切。","誠実な努力が正当に評価される運の流れ。一歩一歩真摯に向き合うことで大きな成果に。","大きな波乱は少なく日常の小さな幸せを積み重ねる画数。今ある縁を大切に。","粘り強さと忍耐が鍵。今は種まきの時期と考え前向きに続けることで後に大きく花開く。"];
+  sv('s-b','総画 '+str+'画');sv('s-v',sn[si]);sv('s-s',ss[si]);sv('s-d',sx[si]);
 
   var an=pick(AN,h+zi(mo,d)+ei);
-  sv('a-b','あなたは…');sv('a-v',an.n);sv('a-s',an.d);
+  sv('a-b','あなたは…');sv('a-v',an.n);sv('a-s',an.d);sv('a-d',an.x);
 
   var cl=pick(CL,h+l+t);
-  sv('c-b','今日');sv('c-v',cl.n);sv('c-s',cl.d);
+  sv('c-b','今日');sv('c-v',cl.n);sv('c-s',cl.d);sv('c-d',cl.x);
 
   var st=pick(STN,h+ki+t);
-  sv('st-b','守護石');sv('st-v',st.n);sv('st-s',st.d);
+  sv('st-b','守護石');sv('st-v',st.n);sv('st-s',st.d);sv('st-d',st.x);
 
   var seed=h+d+mo+y+t;
   var sh=TC.slice().sort(function(_a,_b){return Math.sin(seed+TC.indexOf(_a))-Math.sin(seed+TC.indexOf(_b));});
@@ -196,7 +202,7 @@ function fetchAI(apikey,name,zodiac,l,et,kk,an,cl,st,tarot){
   var p='あなたは「ウラナ王」という老賢者の占い師キャラクターです。口調は「〜じゃ」「〜のう」「そなた」など老翁風で、ユーモアたっぷり。以下の構成で'+name+'さんへの今日の運勢を250字程度で書いてください。\n1.「ふぉっふぉっふぉ、わしがウラナ王じゃ。そなたの運命をわしが占ってしんぜよう」で始める\n2.「ふむ、そなたは〜」と占い結果を踏まえた運勢を語る（仕事・行動・挑戦・日常など）\n3.「ラッキーじゃな！〜」「少し気をつけるのじゃ〜」を一言ずつ\n4.「最後にわしから一言『〜』」で格言風に締める\n5.「ではいい一日を過ごすのじゃぞ」で終わる\n【結果】星座:'+zodiac+'/数秘:'+l+'/干支:'+et+'/九星:'+kk+'/動物:'+an+'/色:'+cl+'/石:'+st+'/タロット:'+tarot[0][0]+'・'+tarot[1][0]+'・'+tarot[2][0];
   fetch('/.netlify/functions/claude',{
     method:'POST',
-    headers:{'Content-Type':'application/json','x-api-key':apikey,'anthropic-version':'2023-06-01'},
+    headers:{'Content-Type':'application/json','x-api-key':apikey},
     body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:600,messages:[{role:'user',content:p}]})
   })
   .then(function(r){return r.json();})
