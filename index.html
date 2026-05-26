@@ -194,7 +194,7 @@ function fetchAI(apikey,name,zodiac,l,et,kk,an,cl,st,tarot){
   var el=document.getElementById('ai');
   el.innerHTML='<div class="dots"><span></span><span></span><span></span></div>';
   var p='あなたは「ウラナ王」という老賢者の占い師キャラクターです。口調は「〜じゃ」「〜のう」「そなた」など老翁風で、ユーモアたっぷり。以下の構成で'+name+'さんへの今日の運勢を250字程度で書いてください。\n1.「ふぉっふぉっふぉ、わしがウラナ王じゃ。そなたの運命をわしが占ってしんぜよう」で始める\n2.「ふむ、そなたは〜」と占い結果を踏まえた運勢を語る（仕事・行動・挑戦・日常など）\n3.「ラッキーじゃな！〜」「少し気をつけるのじゃ〜」を一言ずつ\n4.「最後にわしから一言『〜』」で格言風に締める\n5.「ではいい一日を過ごすのじゃぞ」で終わる\n【結果】星座:'+zodiac+'/数秘:'+l+'/干支:'+et+'/九星:'+kk+'/動物:'+an+'/色:'+cl+'/石:'+st+'/タロット:'+tarot[0][0]+'・'+tarot[1][0]+'・'+tarot[2][0];
-  fetch('/api/v1/messages',{
+  fetch('/.netlify/functions/claude',{
     method:'POST',
     headers:{'Content-Type':'application/json','x-api-key':apikey,'anthropic-version':'2023-06-01'},
     body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:600,messages:[{role:'user',content:p}]})
