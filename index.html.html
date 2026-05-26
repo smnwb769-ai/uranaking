@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ウラナ王">
+<meta name="theme-color" content="#7F77DD">
+<title>ウラナ王</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans',sans-serif;background:#f5f4f0;color:#1a1a1a;padding:1.2rem .9rem 4rem;max-width:480px;margin:0 auto}
+h1{font-size:22px;font-weight:700;margin-bottom:3px}
+.sub{font-size:12px;color:#888;margin-bottom:1.4rem}
+.ic{background:#fff;border:0.5px solid #e0ddd6;border-radius:16px;padding:1.2rem;margin-bottom:1rem}
+.r2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+label{font-size:12px;color:#888;display:block;margin-bottom:5px}
+input{width:100%;padding:11px 13px;border:0.5px solid #ddd;border-radius:11px;font-size:16px;outline:none;background:#fff;-webkit-appearance:none;appearance:none}
+input:focus{border-color:#7F77DD}
+.btn{width:100%;font-size:17px;font-weight:700;padding:14px;border-radius:13px;border:none;background:#7F77DD;color:#fff;cursor:pointer;letter-spacing:.03em}
+.btn:active{opacity:.75}
+.sh{font-size:10px;font-weight:700;color:#aaa;letter-spacing:.1em;margin:1.4rem 0 8px;text-transform:uppercase}
+.cards{display:flex;flex-direction:column;gap:9px}
+.rc{background:#fff;border:0.5px solid #e0ddd6;border-radius:13px;padding:.9rem 1rem}
+.rl-lbl{font-size:11px;color:#999;margin-bottom:4px}
+.rr{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:3px}
+.badge{font-size:10px;padding:2px 8px;border-radius:999px;font-weight:600}
+.bp{background:#EEEDFE;color:#3C3489}
+.bt{background:#E1F5EE;color:#0F6E56}
+.ba{background:#FAEEDA;color:#854F0B}
+.bk{background:#FBEAF0;color:#993556}
+.rv{font-size:17px;font-weight:700}
+.rs{font-size:11px;color:#777;line-height:1.5}
+.tt{font-size:9px;color:#993556;background:#FBEAF0;padding:1px 6px;border-radius:999px;margin-left:5px;font-weight:600}
+.tg{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.tc{background:#f5f4f0;border:0.5px solid #e0ddd6;border-radius:11px;padding:.75rem .5rem;text-align:center;cursor:pointer;transition:background .15s,border-color .15s}
+.tc.flipped{background:#fff;border-color:#7F77DD}
+.tc:active{opacity:.7}
+.tl{font-size:10px;color:#999;margin-bottom:5px}
+.ti{font-size:30px;margin-bottom:4px;line-height:1}
+.tn{font-size:12px;font-weight:600}
+.tm{font-size:10px;color:#888;margin-top:3px;line-height:1.4}
+.hint{font-size:11px;color:#bbb;text-align:center;margin-bottom:8px}
+.ac{background:#fff;border:0.5px solid #e0ddd6;border-radius:13px;padding:1.1rem}
+.at{font-size:14px;line-height:2;white-space:pre-wrap}
+.dots{display:inline-flex;gap:4px;padding:.5rem 0}
+.dots span{width:7px;height:7px;border-radius:50%;background:#bbb;animation:d 1.2s infinite}
+.dots span:nth-child(2){animation-delay:.2s}
+.dots span:nth-child(3){animation-delay:.4s}
+@keyframes d{0%,80%,100%{opacity:.2}40%{opacity:1}}
+#res{display:none}
+.note{font-size:11px;color:#ccc;margin-top:1.2rem;text-align:center}
+.key-wrap{background:#fff;border:0.5px solid #e0ddd6;border-radius:13px;padding:1rem;margin-bottom:1rem}
+.key-wrap label{font-size:12px;color:#888;margin-bottom:5px;display:block}
+.key-wrap input{font-size:14px;padding:9px 12px}
+.key-note{font-size:11px;color:#bbb;margin-top:6px}
+</style>
+</head>
+<body>
+<h1>👑 ウラナ王</h1>
+<p class="sub">名前と生年月日だけで9種類の占いを横断する</p>
+
+<div class="key-wrap">
+  <label>Anthropic APIキー</label>
+  <input type="password" id="apikey" placeholder="sk-ant-..." autocomplete="off">
+  <div class="key-note">※ このデバイス内だけで使用。外部送信はされません。</div>
+</div>
+
+<div class="ic">
+  <div class="r2">
+    <div><label>名前</label><input type="text" id="nm" placeholder="田中 さくら" autocomplete="off"></div>
+    <div><label>生年月日</label><input type="date" id="dob" max="2025-12-31"></div>
+  </div>
+  <button class="btn" onclick="go()">✨ 占う</button>
+</div>
+
+<div id="res">
+  <div class="sh">⭐ 星・運命系</div>
+  <div class="cards">
+    <div class="rc"><div class="rl-lbl">星座</div><div class="rr"><span class="badge bp" id="z-b"></span><span class="rv" id="z-v"></span></div><div class="rs" id="z-s"></div></div>
+    <div class="rc"><div class="rl-lbl">数秘術</div><div class="rr"><span class="badge bt" id="n-b"></span><span class="rv" id="n-v"></span></div><div class="rs" id="n-s"></div></div>
+    <div class="rc"><div class="rl-lbl">誕生日占い</div><div class="rr"><span class="badge ba" id="b-b"></span><span class="rv" id="b-v"></span></div><div class="rs" id="b-s"></div></div>
+  </div>
+  <div class="sh">🀄 東洋系</div>
+  <div class="cards">
+    <div class="rc"><div class="rl-lbl">干支</div><div class="rr"><span class="badge ba" id="e-b"></span><span class="rv" id="e-v"></span></div><div class="rs" id="e-s"></div></div>
+    <div class="rc"><div class="rl-lbl">九星気学</div><div class="rr"><span class="badge bt" id="k-b"></span><span class="rv" id="k-v"></span></div><div class="rs" id="k-s"></div></div>
+    <div class="rc"><div class="rl-lbl">姓名判断</div><div class="rr"><span class="badge bp" id="s-b"></span><span class="rv" id="s-v"></span></div><div class="rs" id="s-s"></div></div>
+  </div>
+  <div class="sh">💕 診断・エンタメ系</div>
+  <div class="cards">
+    <div class="rc"><div class="rl-lbl">動物占い</div><div class="rr"><span class="badge bk" id="a-b"></span><span class="rv" id="a-v"></span></div><div class="rs" id="a-s"></div></div>
+    <div class="rc"><div class="rl-lbl">ラッキーカラー<span class="tt">今日</span></div><div class="rr"><span class="badge bk" id="c-b"></span><span class="rv" id="c-v"></span></div><div class="rs" id="c-s"></div></div>
+    <div class="rc"><div class="rl-lbl">パワーストーン<span class="tt">今日</span></div><div class="rr"><span class="badge bp" id="st-b"></span><span class="rv" id="st-v"></span></div><div class="rs" id="st-s"></div></div>
+  </div>
+  <div class="sh">🃏 タロット（タップしてめくる）</div>
+  <div class="hint">1枚ずつタップ — 過去・現在・未来</div>
+  <div class="tg" id="tarot"></div>
+  <div class="sh">🔮 ウラナ王の総合運勢</div>
+  <div class="ac"><div id="ai"><div class="dots"><span></span><span></span><span></span></div></div></div>
+  <p class="note">占い結果はエンターテインメントです 👑</p>
+</div>
+
+<script>
+var Z=["山羊座,12/22〜1/19,堅実・野心・責任感,努力家で地に足がついたタイプ","水瓶座,1/20〜2/18,独創・自由・博愛,個性的で未来志向の革新者","魚座,2/19〜3/20,共感・夢想・感受性,直感と共感力に溢れた優しい人","牡羊座,3/21〜4/19,情熱・行動力・リーダー,エネルギッシュで真っ直ぐな先駆者","牡牛座,4/20〜5/20,安定・美食・忍耐,穏やかで美的センス抜群の安定派","双子座,5/21〜6/21,知識・好奇心・コミュ力,話題豊富で場を盛り上げる社交家","蟹座,6/22〜7/22,家庭的・優しさ・直感,情に厚く守りたがりな愛情家","獅子座,7/23〜8/22,カリスマ・誇り・輝き,存在感抜群の堂々とした王様気質","乙女座,8/23〜9/22,几帳面・分析・奉仕,完璧主義で細部に気づく心配り上手","天秤座,9/23〜10/23,調和・美意識・公平,バランス感覚に優れた審美眼の持ち主","蠍座,10/24〜11/22,情熱・神秘・洞察力,深く鋭い洞察力を持つ謎めいた人","射手座,11/23〜12/21,自由・冒険・楽観,好奇心旺盛で明るい冒険家"].map(function(r){var p=r.split(',');return{n:p[0],r:p[1],k:p[2],d:p[3]};});
+var NI=["創始者・リーダー,強い意志と独立心。道を切り開く力があります","協調・平和主義,人の気持ちに敏感で調和が得意な人","創造・表現・社交,感受性豊かで話し上手な明るいムードメーカー","堅実・努力・安定,コツコツ積み上げる信頼されるしっかり者","自由・変化・冒険,刺激を求めて行動するエネルギッシュな自由人","愛情・責任・家庭,思いやり深く人を支えることに喜びを感じる","知性・分析・直感,深く考える哲学者タイプ。神秘的な魅力あり","力・達成・物質,目標達成能力が高い実行力あふれる野心家","奉仕・博愛・完成,大きな愛で人々を包む完結と奉仕の数字"].map(function(r){var p=r.split(',');return{n:p[0],k:p[0],d:p[1]};});
+var ET=["子（ねずみ）,機転が利き行動力抜群。愛嬌があってモテる","丑（うし）,粘り強く誠実。意志が強く信頼される存在","寅（とら）,情熱的でリーダー気質。正義感が強い","卯（うさぎ）,温かく優しい。人当たりよく人気者","辰（たつ）,カリスマ性抜群。夢を大きく描く理想主義者","巳（へび）,直感が鋭く神秘的。深く考える慎重派","午（うま）,活発で社交的。行動力があり場を盛り上げる","未（ひつじ）,芸術センスが高く穏やか。思いやりに溢れる","申（さる）,機知に富み多才。好奇心旺盛で飽きさせない","酉（とり）,完璧主義で几帳面。観察眼が鋭くおしゃれ","戌（いぬ）,忠義心が強く誠実。絆を何より大切にする","亥（いのしし）,一途で純粋。パワフルに目標へ突き進む"].map(function(r){var p=r.split(',');return{n:p[0],d:p[1]};});
+var KK=["一白水星,流動・適応,柔軟性が高く人脈を活かして運を開く","二黒土星,勤勉・忍耐,コツコツ型。信頼を積み上げる努力の星","三碧木星,活動・発展,スピード感と行動力が魅力。話題の中心に","四緑木星,信頼・調和,社交的で信頼厚い。縁を大切にする人","五黄土星,帝王・強運,強烈な個性とカリスマ性を持つ帝王の星","六白金星,リーダー・完璧,高い理想と完璧主義。頼られる存在","七赤金星,社交・金運,話術と愛嬌で場を盛り上げる人気者","八白土星,変革・蓄積,粘り強く変化を乗り越える変革の星","九紫火星,知性・美・直感,頭の回転が速く美的センス抜群"].map(function(r){var p=r.split(',');return{n:p[0],k:p[1],d:p[2]};});
+var AN=["黒豹,クールでミステリアス。実は一途な一面も","チーター,スピード感があり直感で動く行動派","ライオン,堂々としたカリスマ。頼りがいのある存在","虎,情熱的で正義感が強いリーダータイプ","こじか,純粋で感受性豊か。守ってあげたくなる","たぬき,愛嬌たっぷりで憎めないムードメーカー","子猫,甘えん坊で可愛い。実は芯が強い","ゾウ,温厚で記憶力抜群。仲間想いの大黒柱","おおかみ,孤高の一匹狼。信念を曲げない強さ","コアラ,マイペースで穏やか。癒しの存在","ひつじ,穏やかで優しい。芸術的センスあり","うさぎ,人当たりよく愛され上手。観察眼も鋭い"].map(function(r){var p=r.split(',');return{n:p[0],d:p[1]};});
+var CL=["ロイヤルブルー,落ち着きと知性を引き出す","ローズゴールド,愛される柔らかさと上品さを演出","パープル,神秘的な魅力と直感力を高める","エメラルドグリーン,癒しと成長のエネルギーを纏う","コーラルオレンジ,明るく社交的なオーラを放つ","ゴールド,自信と豊かさを引き寄せる太陽色","ラベンダー,感受性と創造力を優しく高める"].map(function(r){var p=r.split(',');return{n:p[0],d:p[1]};});
+var STN=["ローズクォーツ,愛と優しさの石。対人運を高める","アメジスト,直感と精神力を高める紫の癒し石","シトリン,明るいエネルギーで幸運を引き寄せる","ラピスラズリ,知恵と真実を司る深い青の石","ムーンストーン,直感と感受性を高める神秘の石","タイガーアイ,勇気と行動力を与える黄金の石","アクアマリン,コミュニケーション力を高める清らかな石"].map(function(r){var p=r.split(',');return{n:p[0],d:p[1]};});
+var TC=[["愚者","新しい出発・可能性・冒険","🎒"],["魔術師","才能・意志力・創造","🪄"],["女教皇","直感・神秘・潜在力","📖"],["女帝","豊かさ・愛情・繁栄","👑"],["皇帝","権威・安定・リーダーシップ","🏛️"],["教皇","信頼・伝統・助言","🕊️"],["恋人","愛・調和・選択","💞"],["戦車","勝利・前進・意志","⚔️"],["力","勇気・忍耐・内なる強さ","🦁"],["隠者","内省・知恵・孤独","🏮"],["運命の輪","転機・チャンス・流れ","🎡"],["正義","公正・バランス・真実","⚖️"],["吊られた男","待機・視点転換・犠牲","🙃"],["死神","変容・終わりと始まり・変化","🌑"],["節制","調和・忍耐・中庸","🏺"],["悪魔","束縛・誘惑・依存","🔗"],["塔","突然の変化・解放・覚醒","⚡"],["星","希望・癒し・インスピレーション","⭐"],["月","幻想・不安・無意識","🌙"],["太陽","成功・喜び・生命力","☀️"],["審判","覚醒・再生・評価","🎺"],["世界","完成・達成・統合","🌍"]];
+
+function td(){var t=new Date();return t.getFullYear()*10000+(t.getMonth()+1)*100+t.getDate();}
+function eto(y,m,d){var a=(m<2||(m===2&&d<4))?y-1:y;return((a-1984)%12+12)%12;}
+function zi(m,d){var v=m*100+d;if(v>=1222||v<=119)return 0;if(v<=218)return 1;if(v<=320)return 2;if(v<=419)return 3;if(v<=520)return 4;if(v<=621)return 5;if(v<=722)return 6;if(v<=822)return 7;if(v<=922)return 8;if(v<=1023)return 9;if(v<=1122)return 10;return 11;}
+function lp(s){var n=s.replace(/-/g,'').split('').reduce(function(a,c){return a+parseInt(c);},0);while(n>9&&n!==11&&n!==22&&n!==33)n=String(n).split('').reduce(function(a,c){return a+parseInt(c);},0);return n;}
+function hv(s){return s.split('').reduce(function(a,c){return a+c.charCodeAt(0);},0);}
+function pick(a,s){return a[Math.abs(Math.round(s))%a.length];}
+function sv(id,v){document.getElementById(id).textContent=v;}
+
+function go(){
+  var apikey=document.getElementById('apikey').value.trim();
+  var name=document.getElementById('nm').value.trim();
+  var dob=document.getElementById('dob').value;
+  if(!apikey){alert('APIキーを入力してください');return;}
+  if(!name||!dob){alert('名前と生年月日を入力してください');return;}
+  var pts=dob.split('-');
+  var y=parseInt(pts[0]),mo=parseInt(pts[1]),d=parseInt(pts[2]);
+  var h=hv(name),t=td();
+
+  var zd=Z[zi(mo,d)];
+  sv('z-b',zd.r);sv('z-v',zd.n);sv('z-s',zd.k+'　'+zd.d);
+
+  var l=lp(dob),ni=l<=9?l-1:l===11?1:l===22?3:0,nd=NI[Math.max(0,Math.min(8,ni))];
+  sv('n-b','No.'+l);sv('n-v',nd.k);sv('n-s',nd.d);
+
+  var bk=["感受性型","行動力型","安定誠実型","直感創造型","気配り型"];
+  var bs=["感受性豊かで優しいムードメーカー。直感が鋭く周囲を癒す。","行動力と好奇心のかたまり。場を盛り上げるエネルギッシュなタイプ。","慎重で思慮深い安定派。一度信頼すると深い絆を結ぶ誠実な人。","直感的に動くクリエイター。発想が豊かで人を惹きつけるオーラあり。","気配り上手で縁の下の力持ち。人から慕われるタイプ。"];
+  var bi=(d-1+h)%5;
+  sv('b-b',d+'日生まれ');sv('b-v',bk[bi]);sv('b-s',bs[bi]);
+
+  var ei=eto(y,mo,d),ed=ET[ei];
+  sv('e-b',y+'年生まれ');sv('e-v',ed.n);sv('e-s',ed.d);
+
+  var kkB=(mo<2?y-1:y)%9,ki=[8,7,6,5,4,3,2,1,0][kkB<0?kkB+9:kkB],kd=KK[ki];
+  sv('k-b','第'+(ki+1)+'星');sv('k-v',kd.n);sv('k-s',kd.k+'　'+kd.d);
+
+  var str=1,nm=name.replace(/\s/g,'');
+  for(var i=0;i<nm.length;i++)str+=nm.charCodeAt(i)%20+1;
+  str=str%49+1;
+  var si=Math.abs(str+h)%5;
+  var sn=["大吉","吉","中吉","小吉","末吉"];
+  var ss=["大吉：才能と運が重なる強運の画数。","吉：安定した運勢で着実に幸運が集まる。","中吉：努力が報われる誠実な運の流れ。","小吉：穏やかな歩みが吉を招く。","末吉：粘り強さが開運のカギになる。"];
+  sv('s-b','総画 '+str+'画');sv('s-v',sn[si]);sv('s-s',ss[si]);
+
+  var an=pick(AN,h+zi(mo,d)+ei);
+  sv('a-b','あなたは…');sv('a-v',an.n);sv('a-s',an.d);
+
+  var cl=pick(CL,h+l+t);
+  sv('c-b','今日');sv('c-v',cl.n);sv('c-s',cl.d);
+
+  var st=pick(STN,h+ki+t);
+  sv('st-b','守護石');sv('st-v',st.n);sv('st-s',st.d);
+
+  var seed=h+d+mo+y+t;
+  var sh=TC.slice().sort(function(_a,_b){return Math.sin(seed+TC.indexOf(_a))-Math.sin(seed+TC.indexOf(_b));});
+  var three=[sh[0],sh[1],sh[2]];
+  var lb=['過去','現在','未来'];
+  var ta=document.getElementById('tarot');
+  ta.innerHTML='';
+  three.forEach(function(c,i){
+    var div=document.createElement('div');
+    div.className='tc';
+    div.innerHTML='<div class="tl">'+lb[i]+'</div><div class="ti">🂠</div><div class="tn" style="color:#aaa;font-weight:400">タップしてめくる</div><div class="tm"></div>';
+    div.onclick=function(){
+      if(this.classList.contains('flipped'))return;
+      this.classList.add('flipped');
+      this.querySelector('.ti').textContent=c[2];
+      var tn=this.querySelector('.tn');
+      tn.textContent=c[0];tn.style.fontWeight='600';tn.style.color='';
+      this.querySelector('.tm').textContent=c[1];
+    };
+    ta.appendChild(div);
+  });
+
+  document.getElementById('res').style.display='block';
+  document.getElementById('res').scrollIntoView({behavior:'smooth'});
+  fetchAI(apikey,name,zd.n,l,ed.n,kd.n,an.n,cl.n,st.n,three);
+}
+
+function fetchAI(apikey,name,zodiac,l,et,kk,an,cl,st,tarot){
+  var el=document.getElementById('ai');
+  el.innerHTML='<div class="dots"><span></span><span></span><span></span></div>';
+  var p='あなたは「ウラナ王」という老賢者の占い師キャラクターです。口調は「〜じゃ」「〜のう」「そなた」など老翁風で、ユーモアたっぷり。以下の構成で'+name+'さんへの今日の運勢を250字程度で書いてください。\n1.「ふぉっふぉっふぉ、わしがウラナ王じゃ。そなたの運命をわしが占ってしんぜよう」で始める\n2.「ふむ、そなたは〜」と占い結果を踏まえた運勢を語る（仕事・行動・挑戦・日常など）\n3.「ラッキーじゃな！〜」「少し気をつけるのじゃ〜」を一言ずつ\n4.「最後にわしから一言『〜』」で格言風に締める\n5.「ではいい一日を過ごすのじゃぞ」で終わる\n【結果】星座:'+zodiac+'/数秘:'+l+'/干支:'+et+'/九星:'+kk+'/動物:'+an+'/色:'+cl+'/石:'+st+'/タロット:'+tarot[0][0]+'・'+tarot[1][0]+'・'+tarot[2][0];
+  fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{'Content-Type':'application/json','x-api-key':apikey,'anthropic-version':'2023-06-01'},
+    body:JSON.stringify({model:'claude-haiku-4-5-20251001',max_tokens:600,messages:[{role:'user',content:p}]})
+  })
+  .then(function(r){return r.json();})
+  .then(function(data){
+    var txt=data.content&&data.content.map(function(b){return b.text||'';}).join('');
+    el.innerHTML='<div class="at">'+(txt||'エラーが発生しました。APIキーを確認してください。')+'</div>';
+  })
+  .catch(function(){
+    el.innerHTML='<div class="at" style="color:#999">通信エラー。ネットワークを確認してください。</div>';
+  });
+}
+</script>
+</body>
+</html>
